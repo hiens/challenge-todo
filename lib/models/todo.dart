@@ -2,12 +2,14 @@ import 'dart:convert';
 
 class Todo {
   Todo({
+    required this.uniqueId,
     required this.task,
     this.description,
     this.isCompleted = false,
     this.deadline,
   });
 
+  final String uniqueId;
   final String task;
   final String? description;
   final bool isCompleted;
@@ -20,6 +22,7 @@ class Todo {
     DateTime? deadline,
   }) {
     return Todo(
+      uniqueId: uniqueId,
       task: task ?? this.task,
       description: description ?? this.description,
       isCompleted: isCompleted ?? this.isCompleted,
@@ -33,6 +36,7 @@ class Todo {
       final Map<String, dynamic> jsonData = jsonDecode(jsonEncode(input));
 
       return Todo(
+        uniqueId: jsonData['uniqueId'],
         task: jsonData['task'],
         description: jsonData['description'],
         isCompleted: jsonData['isCompleted'],
@@ -48,6 +52,7 @@ class Todo {
   /// Create json object from File instance
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
+      'uniqueId': uniqueId,
       'task': task,
       'description': description,
       'isCompleted': isCompleted,

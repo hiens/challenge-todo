@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 
 class CustomBottomBar extends StatelessWidget {
-  const CustomBottomBar({Key? key}) : super(key: key);
+  const CustomBottomBar(
+      {required this.activeIndex, required this.onTap, Key? key})
+      : super(key: key);
+  final int activeIndex;
+  final Function(int) onTap;
 
-  Widget _buildBottomAppBarItem({required bool isActive}) {
+  Widget _buildBottomAppBarItem({
+    required bool isActive,
+    required String label,
+    required VoidCallback onTap,
+  }) {
     return InkWell(
-      onTap: () {},
+      onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(16),
         child: Center(
@@ -13,23 +21,23 @@ class CustomBottomBar extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Text(
-                'Completed',
+                label,
                 style: TextStyle(
                   color: isActive ? Colors.black : Colors.grey[700],
                   fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
                 ),
                 textAlign: TextAlign.center,
               ),
-              if (isActive)
-                Container(
-                  margin: const EdgeInsets.only(top: 4),
-                  width: isActive ? 50 : 0,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: isActive ? Colors.black : Colors.transparent,
-                    borderRadius: BorderRadius.circular(99),
-                  ),
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                margin: const EdgeInsets.only(top: 4),
+                width: isActive ? 55 : 0,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: isActive ? Colors.black : Colors.transparent,
+                  borderRadius: BorderRadius.circular(99),
                 ),
+              ),
             ],
           ),
         ),
@@ -45,17 +53,22 @@ class CustomBottomBar extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Expanded(
-              child: _buildBottomAppBarItem(isActive: true),
-            ),
-            Expanded(
-              child: _buildBottomAppBarItem(isActive: false),
-            ),
-            Expanded(
-              child: _buildBottomAppBarItem(isActive: false),
-            ),
-          ],
+          children: <String>['All', 'Incomplete', 'Completed']
+              .asMap()
+              .map((int index, String label) {
+                return MapEntry<int, Widget>(
+                  index,
+                  Expanded(
+                    child: _buildBottomAppBarItem(
+                      isActive: activeIndex == index,
+                      label: label,
+                      onTap: () => onTap(index),
+                    ),
+                  ),
+                );
+              })
+              .values
+              .toList(),
         ),
       ),
     );

@@ -12,10 +12,10 @@ class TodoRepository {
   }
 
   /// Get todo list from local database
-  Future<List<Todo>> getTodos() async {
+  Future<List<Todo>> getTodo() async {
     return <Todo>[];
   }
 
   /// Save todo list to local database
-  Future<void> saveTodos() async {}
+  Future<void> saveTodo(List<Todo> value) async {}
 }
