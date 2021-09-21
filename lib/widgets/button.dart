@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 enum _ButtonType { ELEVATED, TEXT, OUTLINED }
-enum ButtonSize { SMALL, LARGE }
 
 class Button extends StatelessWidget {
   const Button({
@@ -16,7 +16,6 @@ class Button extends StatelessWidget {
     this.onPressed,
     this.icon,
     this.textColor,
-    this.size,
     this.elevation,
     this.textStyle,
   });
@@ -30,7 +29,6 @@ class Button extends StatelessWidget {
     bool? isFullWidth,
     bool? iconRight,
     BorderRadius? borderRadius,
-    ButtonSize? size,
     double? elevation,
     TextStyle? textStyle,
   }) {
@@ -44,7 +42,6 @@ class Button extends StatelessWidget {
       isFullWidth: isFullWidth ?? false,
       iconRight: iconRight ?? false,
       borderRadius: borderRadius ?? BorderRadius.circular(8),
-      size: size ?? ButtonSize.LARGE,
       elevation: elevation,
       textStyle: textStyle,
     );
@@ -59,7 +56,6 @@ class Button extends StatelessWidget {
     bool? isFullWidth,
     bool? iconRight,
     BorderRadius? borderRadius,
-    ButtonSize? size,
     double? elevation,
     TextStyle? textStyle,
   }) {
@@ -73,7 +69,6 @@ class Button extends StatelessWidget {
       isFullWidth: isFullWidth ?? false,
       iconRight: iconRight ?? false,
       borderRadius: borderRadius ?? BorderRadius.circular(8),
-      size: size ?? ButtonSize.LARGE,
       elevation: elevation,
       textStyle: textStyle,
     );
@@ -88,7 +83,6 @@ class Button extends StatelessWidget {
     bool? isFullWidth,
     bool? iconRight,
     BorderRadius? borderRadius,
-    ButtonSize? size,
     double? elevation,
     TextStyle? textStyle,
   }) {
@@ -102,7 +96,6 @@ class Button extends StatelessWidget {
       isFullWidth: isFullWidth ?? false,
       iconRight: iconRight ?? false,
       borderRadius: borderRadius ?? BorderRadius.circular(8),
-      size: size ?? ButtonSize.LARGE,
       elevation: elevation,
       textStyle: textStyle,
     );
@@ -117,7 +110,6 @@ class Button extends StatelessWidget {
   final Function()? onPressed;
   final Icon? icon;
   final Color? textColor;
-  final ButtonSize? size;
   final double? elevation;
   final TextStyle? textStyle;
 
@@ -160,14 +152,11 @@ class Button extends StatelessWidget {
           elevation: elevation != null
               ? MaterialStateProperty.resolveWith((_) => elevation)
               : Get.theme.outlinedButtonTheme.style?.elevation,
-          padding:
-              MaterialStateProperty.resolveWith((_) => EdgeInsets.symmetric(
-                    horizontal: size == ButtonSize.LARGE ? 16 : 8,
-                  )),
+          padding: MaterialStateProperty.resolveWith(
+              (_) => const EdgeInsets.symmetric(horizontal: 8)),
           textStyle: MaterialStateProperty.resolveWith(
-            (_) => const TextStyle(
+            (_) => GoogleFonts.playfairDisplay(
               fontWeight: FontWeight.bold,
-              fontFamily: 'ProductSans',
             ),
           ),
           shape: MaterialStateProperty.resolveWith(
@@ -195,14 +184,11 @@ class Button extends StatelessWidget {
           elevation: elevation != null
               ? MaterialStateProperty.resolveWith((_) => elevation)
               : Get.theme.textButtonTheme.style?.elevation,
-          padding:
-              MaterialStateProperty.resolveWith((_) => EdgeInsets.symmetric(
-                    horizontal: size == ButtonSize.LARGE ? 16 : 8,
-                  )),
+          padding: MaterialStateProperty.resolveWith(
+              (_) => const EdgeInsets.symmetric(horizontal: 8)),
           textStyle: MaterialStateProperty.resolveWith(
-            (_) => const TextStyle(
+            (_) => GoogleFonts.playfairDisplay(
               fontWeight: FontWeight.bold,
-              fontFamily: 'ProductSans',
             ),
           ),
           shape: MaterialStateProperty.resolveWith(
@@ -222,14 +208,11 @@ class Button extends StatelessWidget {
           elevation: elevation != null
               ? MaterialStateProperty.resolveWith((_) => elevation)
               : Get.theme.elevatedButtonTheme.style?.elevation,
-          padding:
-              MaterialStateProperty.resolveWith((_) => EdgeInsets.symmetric(
-                    horizontal: size == ButtonSize.LARGE ? 16 : 8,
-                  )),
+          padding: MaterialStateProperty.resolveWith(
+              (_) => const EdgeInsets.symmetric(horizontal: 8)),
           textStyle: MaterialStateProperty.resolveWith(
-            (_) => const TextStyle(
+            (_) => GoogleFonts.playfairDisplay(
               fontWeight: FontWeight.bold,
-              fontFamily: 'ProductSans',
             ),
           ),
           shape: MaterialStateProperty.resolveWith(
@@ -249,7 +232,7 @@ class Button extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: size == ButtonSize.LARGE ? 35 : 30,
+      height: 30,
       width: isFullWidth ? double.infinity : null,
       child: Builder(
         builder: (_) {

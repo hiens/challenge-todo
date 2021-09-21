@@ -1,32 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'colors.dart';
 
 final ThemeData appTheme = ThemeData(
   platform: TargetPlatform.android,
   brightness: Brightness.light,
-  appBarTheme: AppBarTheme(
-    systemOverlayStyle: SystemUiOverlayStyle.dark,
-    color: Colors.grey[50],
-    iconTheme: Get.theme.primaryIconTheme.copyWith(color: Colors.black),
-    actionsIconTheme: Get.theme.primaryIconTheme.copyWith(color: Colors.black),
-    elevation: 0,
-    centerTitle: true,
-    toolbarTextStyle: Get.theme.textTheme.headline6?.copyWith(
-      color: Colors.black,
-      fontFamily: 'ProductSans',
-    ),
-    titleTextStyle: Get.theme.textTheme.headline6?.copyWith(
-      color: Colors.black,
-      fontFamily: 'ProductSans',
-    ),
-  ),
   primaryColor: kPrimaryColor,
   primaryColorLight: kPrimaryColorLight,
   primaryColorDark: kPrimaryColorDark,
-  fontFamily: 'ProductSans',
+  textTheme: GoogleFonts.playfairDisplayTextTheme(),
   colorScheme: ColorScheme(
     primary: kPrimaryColor,
     primaryVariant: kPrimaryColorDark,
