@@ -23,6 +23,32 @@ class AddTodoController extends GetxController {
   // Static vars
   final Uuid _uuid = const Uuid();
 
+  /// Add deadline
+  Future<void> addDeadline() async {
+    if (deadline != null) {
+      return;
+    }
+
+    await DatePicker.showDateTimePicker(
+      Get.context!,
+      showTitleActions: true,
+      minTime: DateTime.now(),
+      theme: const DatePickerTheme(
+        doneStyle: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: kPrimaryColor,
+        ),
+      ),
+      currentTime: DateTime.now().add(const Duration(days: 1)),
+      onConfirm: (DateTime date) => deadline = date,
+    );
+  }
+
+  /// Remove deadline
+  void removeDeadline() {
+    deadline = null;
+  }
+
   /// On click Add
   void submit() {
     final Todo generatedTodo = Todo(

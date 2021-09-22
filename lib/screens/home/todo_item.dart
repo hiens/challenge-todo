@@ -1,17 +1,19 @@
 part of 'home.dart';
 
 class TodoItem extends StatelessWidget {
-  const TodoItem(this.todo, {required this.onTap, required Key? key})
+  const TodoItem(this.todo,
+      {required this.onTap, required this.onRemoved, required Key? key})
       : super(key: key);
   final Todo todo;
   final VoidCallback onTap;
+  final VoidCallback onRemoved;
 
   @override
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: () {},
+        onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(8, 8, 16, 8),
           child: Row(
@@ -63,16 +65,21 @@ class TodoItem extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(
-                child: const Text(
-                  '13h50\ntoday',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey,
-                    fontWeight: FontWeight.w600,
+              if (todo.isCompleted)
+                IconButton(onPressed: onRemoved, icon: const Icon(Icons.close))
+              else if (todo.deadline != null)
+                Container(
+                  child: Text(
+                    DateFormat.jm().format(todo.deadline!) +
+                        '\n' +
+                        DateFormat.MMMd().format(todo.deadline!),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
         ),

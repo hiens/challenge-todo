@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:todo/configs/colors.dart';
 import 'package:todo/models/todo.dart';
 import 'package:todo/widgets/button.dart';
@@ -97,29 +99,82 @@ class AddTodoDialog extends StatelessWidget {
                           );
                         }),
                         const SizedBox(width: 8),
-                        Container(
-                          padding: const EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: Colors.grey[300],
-                            border: Border.all(
-                              width: 1.5,
-                              color: Colors.grey[300]!,
+                        Obx(() {
+                          return GestureDetector(
+                            onTap: controller.addDeadline,
+                            child: Container(
+                              padding: const EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: Colors.grey[300],
+                                border: Border.all(
+                                  width: 1.5,
+                                  color: controller.deadline != null
+                                      ? kPrimaryColor
+                                      : Colors.grey[300]!,
+                                ),
+                              ),
+                              child: Row(
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.event,
+                                    size: 16,
+                                    color: controller.deadline != null
+                                        ? kPrimaryColor
+                                        : Colors.grey[700],
+                                  ),
+                                  if (controller.deadline != null) ...<Widget>[
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      controller.deadline!.year !=
+                                              DateTime.now().year
+                                          ? DateFormat.yMMMd()
+                                              .add_jm()
+                                              .format(controller.deadline!)
+                                          : DateFormat.MMMd()
+                                              .add_jm()
+                                              .format(controller.deadline!),
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                        color: kPrimaryColor,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 4),
+                                    GestureDetector(
+                                      onTap: controller.removeDeadline,
+                                      child: Container(
+                                        width: 16,
+                                        height: 16,
+                                        decoration: const BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: kPrimaryColor,
+                                        ),
+                                        child: const Icon(
+                                          Icons.close,
+                                          size: 14,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
                             ),
-                          ),
-                          child: Icon(
-                            Icons.event,
-                            size: 16,
-                            color: Colors.grey[700],
-                          ),
-                        ),
+                          );
+                        }),
                         const Spacer(),
-                        Button.elevated(
-                          onPressed: controller.submit,
-                          icon: const Icon(Icons.add),
-                          label: 'Add',
-                          elevation: 0,
-                        ),
+                        Obx(() {
+                          return Button.elevated(
+                            onPressed: controller.task != null &&
+                                    controller.task!.isNotEmpty
+                                ? controller.submit
+                                : null,
+                            icon: const Icon(Icons.add),
+                            label: 'Add',
+                            elevation: 0,
+                          );
+                        })
                       ],
                     ),
                   ],

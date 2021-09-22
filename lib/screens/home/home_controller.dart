@@ -19,6 +19,10 @@ class HomeScreenController extends GetxController {
       : tab == 1
           ? 'Incomplete'
           : 'Completed';
+  bool get isEmpty =>
+      todoList.isEmpty ||
+      (tab == 1 && incompleteTodo.isEmpty) ||
+      (tab == 2 && completedTodo.isEmpty);
 
   // Static vars
   final TodoRepository _todoRepository = TodoRepository.instance;
@@ -29,7 +33,7 @@ class HomeScreenController extends GetxController {
     fetchTodoList();
 
     // Auto save todo list to local data
-    ever(_todoList, (List<Todo> value) => null);
+    ever(_todoList, (List<Todo> value) => _saveToLocalDb(value));
     super.onInit();
   }
 
@@ -44,13 +48,47 @@ class HomeScreenController extends GetxController {
     }
   }
 
+  /// Import samples from assets
+  Future<void> importSamples() async {
+    try {
+      final List<Todo> results = await _todoRepository.getSampleData();
+      todoList = results;
+    } catch (e) {
+      // Show exception in toast
+      Fluttertoast.showToast(msg: e.toString(), toastLength: Toast.LENGTH_LONG);
+    }
+  }
+
   /// Add new Todo to list
   void addTodoItem(Todo item) {
     todoList = <Todo>[...todoList, item];
   }
 
+  /// Remove a todo from list
+  void removeTodoItem(String uniqueId) {
+    final int removingIndex =
+        todoList.indexWhere((Todo e) => e.uniqueId == uniqueId);
+    todoList = <Todo>[...todoList]..removeAt(removingIndex);
+  }
+
+  /// Check/uncheck todo item
+  void toggleCheck(String uniqueId) {
+    final int editingIndex =
+        todoList.indexWhere((Todo e) => e.uniqueId == uniqueId);
+    final Todo updatedTodo = todoList[editingIndex]
+        .copyWith(isCompleted: !todoList[editingIndex].isCompleted);
+    todoList = <Todo>[...todoList]
+      ..removeAt(editingIndex)
+      ..add(updatedTodo);
+  }
+
   /// Save todo list to local database
   void _saveToLocalDb(List<Todo> value) {
-    _todoRepository.saveTodo(value);
+    try {
+      _todoRepository.saveTodo(value);
+    } catch (e) {
+      // Show exception in toast
+      Fluttertoast.showToast(msg: e.toString(), toastLength: Toast.LENGTH_LONG);
+    }
   }
 }

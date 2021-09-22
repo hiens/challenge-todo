@@ -1,11 +1,12 @@
-import 'package:automatic_animated_list/automatic_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:todo/configs/colors.dart';
 import 'package:todo/models/todo.dart';
 import 'package:todo/repositories/todo.dart';
+import 'package:todo/widgets/button.dart';
 import 'package:todo/widgets/subheader.dart';
 
 import 'add_todo/add_todo.dart';
@@ -17,75 +18,24 @@ part 'todo_item.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
-  Widget _buildTodoList(HomeScreenController controller) {
-    return ListView(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      children: <Widget>[
-        if (controller.tab == 0) const Subheader(label: 'INCOMPLETE'),
-        if (controller.tab != 2 && controller.incompleteTodo.isNotEmpty)
-          AutomaticAnimatedList<Todo>(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            items: controller.incompleteTodo,
-            insertDuration: const Duration(milliseconds: 500),
-            removeDuration: const Duration(milliseconds: 500),
-            keyingFunction: (Todo item) => Key(item.uniqueId),
-            itemBuilder: (
-              BuildContext context,
-              Todo item,
-              Animation<double> animation,
-            ) {
-              return FadeTransition(
-                key: Key(item.uniqueId),
-                opacity: animation,
-                child: SizeTransition(
-                  sizeFactor: CurvedAnimation(
-                    parent: animation,
-                    curve: Curves.easeOut,
-                    reverseCurve: Curves.easeIn,
-                  ),
-                  child: TodoItem(
-                    item,
-                    onTap: () {},
-                    key: Key('todo-item-${item.uniqueId}'),
-                  ),
-                ),
-              );
-            },
-          ),
-        if (controller.tab == 0) const Subheader(label: 'COMPLETED'),
-        if (controller.tab != 1 && controller.completedTodo.isNotEmpty)
-          AutomaticAnimatedList<Todo>(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            items: controller.completedTodo,
-            insertDuration: const Duration(milliseconds: 500),
-            removeDuration: const Duration(milliseconds: 500),
-            keyingFunction: (Todo item) => Key(item.uniqueId),
-            itemBuilder: (
-              BuildContext context,
-              Todo item,
-              Animation<double> animation,
-            ) {
-              return FadeTransition(
-                key: Key(item.uniqueId),
-                opacity: animation,
-                child: SizeTransition(
-                  sizeFactor: CurvedAnimation(
-                    parent: animation,
-                    curve: Curves.easeOut,
-                    reverseCurve: Curves.easeIn,
-                  ),
-                  child: TodoItem(
-                    item,
-                    onTap: () {},
-                    key: Key('todo-item-${item.uniqueId}'),
-                  ),
-                ),
-              );
-            },
-          ),
-      ],
+  /// Build incompleted todo list
+  Widget _buildTodoList({
+    required List<Todo> list,
+    required Function(String) onTapItem,
+    required Function(String) onRemoved,
+  }) {
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: list.length,
+      itemBuilder: (BuildContext context, int i) {
+        return TodoItem(
+          list[i],
+          onTap: () => onTapItem(list[i].uniqueId),
+          onRemoved: () => onRemoved(list[i].uniqueId),
+          key: Key('todo-item-${list[i].uniqueId}'),
+        );
+      },
     );
   }
 
@@ -121,7 +71,61 @@ class HomeScreen extends StatelessWidget {
                 borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
                 color: Colors.white,
               ),
-              child: Obx(() => _buildTodoList(controller)),
+              child: Obx(() {
+                if (controller.isEmpty) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      SizedBox(
+                        width: Get.width / 2,
+                        height: Get.width / 2,
+                        child: Image.asset('assets/images/empty-box.png'),
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'No todos yet!',
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Button.outlined(
+                        label: 'Import samples',
+                        icon: const Icon(Icons.import_export),
+                        onPressed: controller.importSamples,
+                      ),
+                    ],
+                  );
+                } else {
+                  return ListView(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    children: <Widget>[
+                      if (controller.tab == 0 &&
+                          controller.incompleteTodo.isNotEmpty)
+                        const Subheader(label: 'INCOMPLETE'),
+                      if (controller.tab != 2 &&
+                          controller.incompleteTodo.isNotEmpty)
+                        _buildTodoList(
+                          list: controller.incompleteTodo,
+                          onTapItem: controller.toggleCheck,
+                          onRemoved: controller.removeTodoItem,
+                        ),
+                      if (controller.tab == 0 &&
+                          controller.completedTodo.isNotEmpty)
+                        const Subheader(label: 'COMPLETED'),
+                      if (controller.tab != 1 &&
+                          controller.completedTodo.isNotEmpty)
+                        _buildTodoList(
+                          list: controller.completedTodo,
+                          onTapItem: controller.toggleCheck,
+                          onRemoved: controller.removeTodoItem,
+                        ),
+                    ],
+                  );
+                }
+              }),
             ),
           ),
           bottomNavigationBar: Obx(() {

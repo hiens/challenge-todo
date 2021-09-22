@@ -19,5 +19,5 @@ class Database {
   }
 
   /// Get boxes
-  static Box<dynamic> meta() => Hive.box<dynamic>('todo');
+  static Box<dynamic> todo() => Hive.box<dynamic>('todo');
 }

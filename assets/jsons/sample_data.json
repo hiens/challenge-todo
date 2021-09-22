@@ -1,1 +1,44 @@
-{}
+[
+    {
+      "uniqueId": "39776f90-1bd7-11ec-95f1-e982eaca90ce",
+      "task": "Lorem ipsum dolor sit amet",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+      "isCompleted": false,
+      "deadline": null
+    },
+    {
+      "uniqueId": "4858cae0-1bd7-11ec-95f1-e982eaca90ce",
+      "task": "Donec id feugiat sem",
+      "description": "Nulla tristique rutrum nisl, sed pharetra leo convallis vel",
+      "isCompleted": false,
+      "deadline": "2021-09-26T01:59:00.000"
+    },
+    {
+      "uniqueId": "6d66e060-1bd7-11ec-95f1-e982eaca90ce",
+      "task": "Nullam luctus odio a libero sagittis",
+      "description": "Morbi ullamcorper ut purus et gravida",
+      "isCompleted": false,
+      "deadline": null
+    },
+    {
+      "uniqueId": "7afad420-1bd7-11ec-95f1-e982eaca90ce",
+      "task": "Fusce venenatis laoreet scelerisque",
+      "description": "Phasellus ultrices, purus a volutpat vulputate",
+      "isCompleted": true,
+      "deadline": "2021-09-24T02:01:00.000"
+    },
+    {
+      "uniqueId": "a0b640a0-1bd7-11ec-95f1-e982eaca90ce",
+      "task": "Nullam tellus turpis",
+      "description": "Phasellus mollis a leo vel eleifend",
+      "isCompleted": false,
+      "deadline": null
+    },
+    {
+      "uniqueId": "94f9a4f0-1bd7-11ec-95f1-e982eaca90ce",
+      "task": "Curabitur sit amet finibus magna, sed tristique velit",
+      "description": "Maecenas finibus maximus eros dictum bibendum",
+      "isCompleted": true,
+      "deadline": null
+    }
+  ]

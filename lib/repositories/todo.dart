@@ -1,3 +1,8 @@
+import 'dart:convert';
+
+import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
+import 'package:todo/configs/database.dart';
 import 'package:todo/models/todo.dart';
 
 class TodoRepository {
@@ -8,14 +13,30 @@ class TodoRepository {
 
   /// Get sample data from asset
   Future<List<Todo>> getSampleData() async {
-    return <Todo>[];
+    final String response =
+        await rootBundle.loadString('assets/jsons/sample_data.json');
+    final dynamic data = await json.decode(response);
+
+    if (data is List && data.isNotEmpty)
+      return data.map((dynamic item) => Todo.fromJson(item)).toList();
+    else
+      return <Todo>[];
   }
 
   /// Get todo list from local database
   Future<List<Todo>> getTodo() async {
-    return <Todo>[];
+    final Box<dynamic> todoBox = Database.todo();
+
+    if (todoBox.values.isNotEmpty)
+      return todoBox.values.map((dynamic item) => Todo.fromJson(item)).toList();
+    else
+      return <Todo>[];
   }
 
   /// Save todo list to local database
-  Future<void> saveTodo(List<Todo> value) async {}
+  Future<void> saveTodo(List<Todo> list) async {
+    final Box<dynamic> todoBox = Database.todo();
+    todoBox.deleteAll(todoBox.keys);
+    todoBox.addAll(list.map<dynamic>((Todo item) => item.toJson()).toList());
+  }
 }
