@@ -1,12 +1,11 @@
 part of 'home.dart';
 
 class TodoItem extends StatelessWidget {
-  const TodoItem(this.todo,
-      {required this.onTap, required this.onRemoved, required Key? key})
+  const TodoItem(this.todo, {this.onTap, this.onRemoved, required Key? key})
       : super(key: key);
   final Todo todo;
-  final VoidCallback onTap;
-  final VoidCallback onRemoved;
+  final VoidCallback? onTap;
+  final VoidCallback? onRemoved;
 
   @override
   Widget build(BuildContext context) {
